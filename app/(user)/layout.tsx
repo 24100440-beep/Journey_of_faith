@@ -23,7 +23,8 @@ const navItems = [
   { href: '/loi-chua', label: 'Lời Chúa', icon: BookOpenIcon },
   { href: '/su-kien', label: 'Tin tức - Sự kiện', icon: CalendarIcon },
   { href: '/xem-le', label: 'Xem lễ trực tuyến', icon: CalendarIcon },
-  {href :'/ket-noi', label: 'Kết nối cộng đoàn', icon: UserIcon},
+  { href: '/nhac-mua', label: 'Nhạc Công Giáo', icon: BookOpenIcon },
+  // {href :'/ket-noi', label: 'Kết nối cộng đoàn', icon: UserIcon},
   { href: '/trac-nghiem', label: 'Trắc nghiệm', icon: BrainIcon },
 ];
 
