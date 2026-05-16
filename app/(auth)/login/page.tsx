@@ -1,27 +1,20 @@
 'use client';
-import Image from 'next/image';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  MailIcon,
-  LockIcon,
-  EyeIcon,
-  EyeOffIcon,
-} from '@/components/icons';
-import { Spinner } from '@/components/ui/spinner';
+import { 
+  Mail, 
+  Lock, 
+  Eye, 
+  EyeOff, 
+  Cross, 
+  Church, 
+  Heart,
+  Shield,
+  LogIn
+} from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -46,7 +39,7 @@ export default function LoginPage() {
       } else if (formData.email && formData.password) {
         router.push('/dashboard');
       } else {
-        setError('Vui lòng nhập đầy đủ thông tin');
+        setError('Email hoặc mật khẩu không đúng');
       }
     } catch {
       setError('Đăng nhập thất bại. Vui lòng thử lại.');
@@ -56,163 +49,264 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0b1020]">
-      {/* Background kiểu kính màu nhà thờ */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,215,120,0.15),_transparent_28%),radial-gradient(circle_at_top_right,_rgba(147,51,234,0.16),_transparent_30%),radial-gradient(circle_at_bottom_left,_rgba(59,130,246,0.12),_transparent_30%),linear-gradient(135deg,_#0b1020_0%,_#131a2f_45%,_#1f1037_100%)]" />
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-indigo-900">
+      
+      {/* Hiệu ứng kính màu nhà thờ */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-500" />
+      </div>
 
-      {/* Lưới kính mờ */}
-      <div className="absolute inset-0 opacity-10 [background-image:linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:90px_90px]" />
+      {/* Hoa văn thánh giá */}
+      <div className="absolute inset-0 opacity-5">
+        {[...Array(24)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute text-white text-6xl"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              transform: `rotate(${Math.random() * 360}deg)`,
+              animationDelay: `${Math.random() * 5}s`,
+            }}
+          >
+            ✝
+          </div>
+        ))}
+      </div>
 
-      {/* Ánh sáng vàng */}
-      <div className="absolute top-0 left-1/2 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-amber-300/10 blur-3xl" />
+      {/* Lưới ánh sáng */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
 
-      {/* Glow tím */}
-      <div className="absolute bottom-0 right-0 h-[320px] w-[320px] rounded-full bg-purple-500/10 blur-3xl" />
-
-      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-10">
-        <div className="w-full max-w-md">
+      <div className="relative z-10 flex min-h-screen items-center justify-center p-4">
+        <div className="w-full max-w-lg">
           
-          {/* Header nhỏ gọn */}
-          <div className="mb-6 text-center text-white">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/10 text-2xl shadow-lg backdrop-blur-md">
-              <Image
-                src="/images/logo.jpg"
-                alt="Logo"
-                width={80}
-                height={80}
-                className="object-contain drop-shadow-lg"
-              />
+          {/* Thánh giá và tiêu đề */}
+          <div className="text-center mb-8 animate-fadeInDown">
+            <div className="inline-flex items-center justify-center mb-6">
+              <div className="relative">
+                <div className="absolute inset-0 bg-amber-400/20 rounded-full blur-xl" />
+                <div className="relative w-24 h-24 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-2xl flex items-center justify-center shadow-2xl transform rotate-45">
+                  <Cross className="w-12 h-12 text-white -rotate-45" />
+                </div>
+              </div>
             </div>
-            <h1 className="text-3xl font-serif font-semibold tracking-wide">
-              Hành Trình Đức Tin
+            <h1 className="text-4xl font-bold text-white mb-2 tracking-wide">
+              Chào Mừng Trở Lại
             </h1>
-            <p className="mt-2 text-sm text-slate-300">
-              Đồng hành cùng đời sống đức tin mỗi ngày
+            <p className="text-amber-200/80 text-sm">
+              Đăng nhập để tiếp tục hành trình đức tin
             </p>
           </div>
 
-          {/* Form card */}
-          <Card className="border border-white/15 bg-white/10 shadow-2xl backdrop-blur-2xl rounded-3xl text-white">
-            <CardHeader className="space-y-2 text-center pb-4">
-              <CardTitle className="text-2xl font-serif tracking-wide">
-                Đăng nhập
-              </CardTitle>
-              <CardDescription className="text-slate-200/80">
-                Nhập thông tin để tiếp tục
-              </CardDescription>
-            </CardHeader>
-
-            <form onSubmit={handleSubmit}>
-              <CardContent className="space-y-5">
-                {error && (
-                  <div className="rounded-2xl border border-red-300/20 bg-red-400/10 px-4 py-3 text-sm text-red-200">
-                    {error}
-                  </div>
-                )}
-
-                {/* Email */}
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-slate-100">
-                    Email
-                  </Label>
-                  <div className="relative">
-                    <MailIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-300" />
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="email@example.com"
-                      className="h-12 rounded-2xl border border-white/15 bg-white/10 pl-10 text-white placeholder:text-slate-300/60 backdrop-blur-md focus-visible:ring-2 focus-visible:ring-amber-400"
-                      value={formData.email}
-                      onChange={(e) =>
-                        setFormData({ ...formData, email: e.target.value })
-                      }
-                      required
-                    />
-                  </div>
+          {/* Card đăng nhập */}
+          <div className="bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 p-8 shadow-2xl animate-fadeInUp">
+            
+            {/* Thông báo lỗi */}
+            {error && (
+              <div className="mb-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 animate-shake">
+                <div className="flex items-center gap-3 text-red-300">
+                  <Shield className="w-5 h-5" />
+                  <p className="text-sm font-medium">{error}</p>
                 </div>
+              </div>
+            )}
 
-                {/* Password */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="password" className="text-slate-100">
-                      Mật khẩu
-                    </Label>
-                    <Link
-                      href="/forgot-password"
-                      className="text-sm text-amber-300 hover:underline"
-                    >
-                      Quên mật khẩu?
-                    </Link>
-                  </div>
-
-                  <div className="relative">
-                    <LockIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-300" />
-                    <Input
-                      id="password"
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder="Nhập mật khẩu"
-                      className="h-12 rounded-2xl border border-white/15 bg-white/10 pl-10 pr-10 text-white placeholder:text-slate-300/60 backdrop-blur-md focus-visible:ring-2 focus-visible:ring-amber-400"
-                      value={formData.password}
-                      onChange={(e) =>
-                        setFormData({ ...formData, password: e.target.value })
-                      }
-                      required
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 transition hover:text-white"
-                    >
-                      {showPassword ? (
-                        <EyeOffIcon className="h-4 w-4" />
-                      ) : (
-                        <EyeIcon className="h-4 w-4" />
-                      )}
-                    </button>
-                  </div>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Email */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-200 flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-amber-400" />
+                  Địa chỉ Email
+                </label>
+                <div className="relative group">
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full h-12 px-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 outline-none transition-all duration-300"
+                    placeholder="nhap@email.com"
+                    required
+                  />
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-amber-400/0 via-amber-400/0 to-amber-400/0 group-focus-within:from-amber-400/10 group-focus-within:via-amber-400/5 group-focus-within:to-transparent pointer-events-none transition-all duration-500" />
                 </div>
-              </CardContent>
+              </div>
 
-              <CardFooter className="flex-col gap-4 pt-2">
-                <Button
-                  type="submit"
-                  className="h-12 w-full rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-600 text-slate-950 font-semibold shadow-lg transition hover:scale-[1.02] hover:shadow-amber-500/30"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <Spinner className="mr-2" />
-                      Đang xử lý...
-                    </>
-                  ) : (
-                    'Đăng nhập'
-                  )}
-                </Button>
-
-                <div className="text-center text-sm text-slate-200/80">
-                  Chưa có tài khoản?{' '}
-                  <Link
-                    href="/register"
-                    className="font-semibold text-amber-300 hover:underline"
+              {/* Mật khẩu */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-gray-200 flex items-center gap-2">
+                    <Lock className="w-4 h-4 text-amber-400" />
+                    Mật khẩu
+                  </label>
+                  <Link 
+                    href="/forgot-password" 
+                    className="text-xs text-amber-400 hover:text-amber-300 transition-colors"
                   >
-                    Đăng ký ngay
+                    Quên mật khẩu?
                   </Link>
                 </div>
-              </CardFooter>
-            </form>
-          </Card>
+                <div className="relative group">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    className="w-full h-12 px-4 pr-12 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 outline-none transition-all duration-300"
+                    placeholder="••••••••"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-amber-400 transition-colors"
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-amber-400/0 via-amber-400/0 to-amber-400/0 group-focus-within:from-amber-400/10 group-focus-within:via-amber-400/5 group-focus-within:to-transparent pointer-events-none transition-all duration-500" />
+                </div>
+              </div>
 
-          {/* Câu Kinh Thánh nhỏ bên dưới */}
-          <div className="mt-6 text-center text-sm text-slate-300/80">
-            <p className="italic">
-              “Ta là ánh sáng thế gian. Ai theo Ta, sẽ không đi trong tối tăm.”
-            </p>
-            <p className="mt-2 text-xs tracking-[0.25em] text-amber-300/80">
-              GIOAN 8:12
-            </p>
+              {/* Ghi nhớ đăng nhập */}
+              <div className="flex items-center justify-between">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" className="w-4 h-4 rounded border-white/20 bg-white/5 text-amber-500 focus:ring-amber-500 focus:ring-offset-0" />
+                  <span className="text-sm text-gray-300">Ghi nhớ đăng nhập</span>
+                </label>
+                <div className="flex items-center gap-1 text-xs text-gray-400">
+                  <Heart className="w-3 h-3" />
+                  <span>Chúa yêu bạn</span>
+                </div>
+              </div>
+
+              {/* Nút đăng nhập */}
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="relative w-full h-12 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-xl font-semibold text-gray-900 overflow-hidden group transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                {isLoading ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="w-5 h-5 border-2 border-gray-900 border-t-transparent rounded-full animate-spin" />
+                    <span>Đang đăng nhập...</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center gap-2">
+                    <LogIn className="w-4 h-4" />
+                    <span>Đăng nhập</span>
+                  </div>
+                )}
+              </button>
+            </form>
+
+            {/* Đăng ký */}
+            <div className="mt-6 text-center">
+              <p className="text-gray-300 text-sm">
+                Chưa có tài khoản?{' '}
+                <Link 
+                  href="/register" 
+                  className="text-amber-400 hover:text-amber-300 font-medium transition-colors inline-flex items-center gap-1 group"
+                >
+                  Đăng ký ngay
+                  <span className="group-hover:translate-x-1 transition-transform">→</span>
+                </Link>
+              </p>
+            </div>
+
+            {/* Đường kẻ trang trí */}
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-white/10"></div>
+              </div>
+              <div className="relative flex justify-center text-xs">
+                <span className="px-3 bg-transparent text-gray-400">hoặc</span>
+              </div>
+            </div>
+
+            {/* Nút đăng nhập nhanh */}
+            <div className="grid grid-cols-2 gap-3">
+              <button className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-sm text-gray-300 hover:bg-white/10 transition-colors flex items-center justify-center gap-2 group">
+                <Church className="w-4 h-4 group-hover:text-amber-400 transition-colors" />
+                Giáo xứ
+              </button>
+              <button className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-sm text-gray-300 hover:bg-white/10 transition-colors flex items-center justify-center gap-2 group">
+                <Heart className="w-4 h-4 group-hover:text-rose-400 transition-colors" />
+                Hội đoàn
+              </button>
+            </div>
+          </div>
+
+          {/* Câu Kinh Thánh */}
+          <div className="mt-8 text-center">
+            <div className="inline-block p-4 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
+              <p className="text-gray-200 text-sm italic leading-relaxed max-w-md">
+                “Hãy đến với Ta, tất cả những ai đang vất vả mang gánh nặng nề, 
+                Ta sẽ cho nghỉ ngơi bồi dưỡng.”
+              </p>
+              <p className="text-amber-400/80 text-xs mt-2 font-semibold tracking-wider">
+                — MATTHÊU 11:28 —
+              </p>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* CSS Animations */}
+      <style jsx>{`
+        @keyframes fadeInDown {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-5px); }
+          75% { transform: translateX(5px); }
+        }
+        
+        .animate-fadeInDown {
+          animation: fadeInDown 0.6s ease-out;
+        }
+        
+        .animate-fadeInUp {
+          animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .animate-shake {
+          animation: shake 0.3s ease-in-out;
+        }
+        
+        @keyframes pulse {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.6; }
+        }
+        
+        .delay-1000 {
+          animation-delay: 1000ms;
+        }
+        
+        .delay-500 {
+          animation-delay: 500ms;
+        }
+      `}</style>
     </div>
   );
 }
