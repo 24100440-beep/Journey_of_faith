@@ -22,7 +22,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   });
 
@@ -32,15 +32,34 @@ export default function LoginPage() {
     setError('');
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+const response = await fetch(
+  'https://church.codex.pro.vn/Journey_of_faith/Auth',
+  {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username: formData.username,
+      password: formData.password,
+    }),
+  }
+);
 
-      if (formData.email === 'admin@example.com' && formData.password === 'admin123') {
-        router.push('/admin');
-      } else if (formData.email && formData.password) {
-        router.push('/dashboard');
-      } else {
-        setError('Email hoặc mật khẩu không đúng');
-      }
+const data = await response.json();
+
+console.log(data);
+
+if (response.ok) {
+  // lưu token
+  localStorage.setItem('token', data.token);
+
+  // chuyển trang
+  router.push('/dashboard');
+} else {
+  setError(data.detail || 'Đăng nhập thất bại');
+}
+
     } catch {
       setError('Đăng nhập thất bại. Vui lòng thử lại.');
     } finally {
@@ -118,13 +137,13 @@ export default function LoginPage() {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-200 flex items-center gap-2">
                   <Mail className="w-4 h-4 text-amber-400" />
-                  Địa chỉ Email
+                  Tên đăng nhập
                 </label>
                 <div className="relative group">
                   <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    type="text"
+                    value={formData.username}
+                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                     className="w-full h-12 px-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 outline-none transition-all duration-300"
                     placeholder="nhap@email.com"
                     required
