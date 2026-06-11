@@ -308,6 +308,335 @@
 //     </>
 //   );
 // }
+// 'use client';
+
+// import { useEffect, useState } from 'react';
+// import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+// import { Button } from '@/components/ui/button';
+// import { Input } from '@/components/ui/input';
+// import {
+//   CalendarIcon,
+//   ChevronLeftIcon,
+//   ChevronRightIcon,
+//   ClockIcon,
+//   MapPinIcon,
+//   ChurchIcon,
+//   SearchIcon,
+// } from '@/components/icons';
+// import { cn } from '@/lib/utils';
+// import { mockMasses } from '@/lib/mock-data';
+// import type { Mass } from '@/types';
+
+// const DAYS_OF_WEEK = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+// const MONTHS = [
+//   'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
+//   'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
+// ];
+
+// function getDaysInMonth(year: number, month: number) {
+//   return new Date(year, month + 1, 0).getDate();
+// }
+
+// function getFirstDayOfMonth(year: number, month: number) {
+//   return new Date(year, month, 1).getDay();
+// }
+
+// // Mock churches data
+// const mockChurchesData = [
+//   { id: 1, name: 'Nhà thờ Chính Tòa Yên Lộ', address: 'Số 1, đường Yên Lộ' },
+//   { id: 2, name: 'Nhà thờ Thánh Tâm', address: 'Số 10, đường Hoàng Diệu' },
+//   { id: 3, name: 'Nhà thờ Bình An', address: 'Số 5, đường Nguyễn Trãi' },
+//   { id: 4, name: 'Nhà thờ Hy Vọng', address: 'Số 8, đường Lê Lợi' },
+//   { id: 5, name: 'Nhà thờ Hòa Bình', address: 'Số 3, đường Trần Phú' },
+//   { id: 6, name: 'Nhà thờ Ánh Sáng', address: 'Số 12, đường Lý Thường Kiệt' },
+//   { id: 7, name: 'Nhà thờ Tình Thương', address: 'Số 7, đường Hai Bà Trưng' },
+// ];
+
+// export default function LichLePage() {
+//   const [searchKeyword, setSearchKeyword] = useState('');
+//   const [currentDate, setCurrentDate] = useState(new Date());
+//   const [selectedDate, setSelectedDate] = useState(new Date());
+//   const [selectedChurch, setSelectedChurch] = useState<number | null>(null);
+
+//   // Filter churches by keyword
+//   const filteredChurches = mockChurchesData.filter((church) =>
+//     church.name.toLowerCase().includes(searchKeyword.toLowerCase())
+//   );
+//   const displayChurches = filteredChurches.slice(0, 5);
+
+//   const year = currentDate.getFullYear();
+//   const month = currentDate.getMonth();
+//   const daysInMonth = getDaysInMonth(year, month);
+//   const firstDay = getFirstDayOfMonth(year, month);
+
+//   const prevMonth = () => {
+//     setCurrentDate(new Date(year, month - 1, 1));
+//   };
+
+//   const nextMonth = () => {
+//     setCurrentDate(new Date(year, month + 1, 1));
+//   };
+
+//   const goToToday = () => {
+//     const today = new Date();
+//     setCurrentDate(today);
+//     setSelectedDate(today);
+//   };
+
+//   const isToday = (day: number) => {
+//     const today = new Date();
+//     return (
+//       day === today.getDate() &&
+//       month === today.getMonth() &&
+//       year === today.getFullYear()
+//     );
+//   };
+
+//   const isSelected = (day: number) => {
+//     return (
+//       day === selectedDate.getDate() &&
+//       month === selectedDate.getMonth() &&
+//       year === selectedDate.getFullYear()
+//     );
+//   };
+
+//   // Filter masses for selected date and church
+//   const filteredMasses = mockMasses.filter((mass) => {
+//     const matchesDate = mass.massDate.toDateString() === selectedDate.toDateString();
+//     const matchesChurch = selectedChurch === null || mass.churchId === selectedChurch;
+//     return matchesDate && matchesChurch;
+//   });
+
+//   const displayMasses = filteredMasses.length > 0 ? filteredMasses : mockMasses.filter(m => {
+//     if (selectedChurch !== null) {
+//       return m.churchId === selectedChurch;
+//     }
+//     return true;
+//   });
+
+//   const getLiturgicalColorClass = (color?: string) => {
+//     switch (color) {
+//       case 'white': return 'bg-white border border-border';
+//       case 'purple': return 'bg-purple-600';
+//       case 'red': return 'bg-red-600';
+//       case 'green': return 'bg-green-600';
+//       case 'gold': return 'bg-yellow-600';
+//       case 'rose': return 'bg-pink-400';
+//       default: return 'bg-primary';
+//     }
+//   };
+
+//   return (
+//     <div className="space-y-6 pb-20 lg:pb-0">
+//       {/* Header */}
+//       <div>
+//         <h1 className="text-2xl sm:text-3xl font-serif font-bold text-foreground flex items-center gap-3">
+//           <CalendarIcon className="w-7 h-7 text-primary" />
+//           Lịch Thánh Lễ
+//         </h1>
+//         <p className="text-muted-foreground mt-1">
+//           Xem lịch thánh lễ các nhà thờ trong giáo phận
+//         </p>
+//       </div>
+
+//       <div className="grid lg:grid-cols-3 gap-6">
+//         {/* Calendar */}
+//         <Card className="lg:col-span-2">
+//           <CardHeader className="flex flex-row items-center justify-between pb-4">
+//             <div className="flex items-center gap-2">
+//               <Button variant="outline" size="icon" onClick={prevMonth}>
+//                 <ChevronLeftIcon className="w-4 h-4" />
+//               </Button>
+//               <h2 className="text-lg font-semibold min-w-[140px] text-center">
+//                 {MONTHS[month]} {year}
+//               </h2>
+//               <Button variant="outline" size="icon" onClick={nextMonth}>
+//                 <ChevronRightIcon className="w-4 h-4" />
+//               </Button>
+//             </div>
+//             <Button variant="outline" size="sm" onClick={goToToday}>
+//               Hôm nay
+//             </Button>
+//           </CardHeader>
+//           <CardContent>
+//             <div className="grid grid-cols-7 gap-1 mb-2">
+//               {DAYS_OF_WEEK.map((day) => (
+//                 <div
+//                   key={day}
+//                   className="h-10 flex items-center justify-center text-sm font-medium text-muted-foreground"
+//                 >
+//                   {day}
+//                 </div>
+//               ))}
+//             </div>
+
+//             <div className="grid grid-cols-7 gap-1">
+//               {Array.from({ length: firstDay }).map((_, i) => (
+//                 <div key={`empty-${i}`} className="h-10" />
+//               ))}
+
+//               {Array.from({ length: daysInMonth }).map((_, i) => {
+//                 const day = i + 1;
+//                 const hasMass = mockMasses.some(
+//                   (m) =>
+//                     m.massDate.getDate() === day &&
+//                     m.massDate.getMonth() === month &&
+//                     m.massDate.getFullYear() === year
+//                 );
+
+//                 return (
+//                   <button
+//                     key={day}
+//                     onClick={() => setSelectedDate(new Date(year, month, day))}
+//                     className={cn(
+//                       'h-10 rounded-lg flex flex-col items-center justify-center text-sm transition-colors relative',
+//                       isToday(day) && !isSelected(day) && 'bg-primary/10 text-primary font-semibold',
+//                       isSelected(day) && 'bg-primary text-primary-foreground font-semibold',
+//                       !isToday(day) && !isSelected(day) && 'hover:bg-secondary',
+//                     )}
+//                   >
+//                     {day}
+//                     {hasMass && !isSelected(day) && (
+//                       <div className="absolute bottom-1 w-1 h-1 rounded-full bg-primary" />
+//                     )}
+//                   </button>
+//                 );
+//               })}
+//             </div>
+//           </CardContent>
+//         </Card>
+
+//         {/* Filter by Church */}
+//         <Card>
+//           <CardHeader>
+//             <CardTitle className="flex items-center gap-2 text-base">
+//               <ChurchIcon className="w-5 h-5" />
+//               Chọn Nhà Thờ
+//             </CardTitle>
+//           </CardHeader>
+//           <CardContent className="space-y-4">
+//             <div className="relative">
+//               <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+//               <Input
+//                 type="text"
+//                 placeholder="Tìm nhà thờ..."
+//                 value={searchKeyword}
+//                 onChange={(e) => setSearchKeyword(e.target.value)}
+//                 className="pl-9"
+//               />
+//             </div>
+
+//             <div className="space-y-2">
+//               <Button
+//                 variant={selectedChurch === null ? 'default' : 'outline'}
+//                 className="w-full justify-start"
+//                 onClick={() => setSelectedChurch(null)}
+//               >
+//                 Tất cả nhà thờ
+//               </Button>
+              
+//               {displayChurches.length > 0 ? (
+//                 displayChurches.map((church) => (
+//                   <Button
+//                     key={church.id}
+//                     variant={selectedChurch === church.id ? 'default' : 'outline'}
+//                     className="w-full justify-start text-left"
+//                     onClick={() => setSelectedChurch(church.id)}
+//                   >
+//                     <span className="truncate">{church.name}</span>
+//                   </Button>
+//                 ))
+//               ) : (
+//                 <p className="text-sm text-muted-foreground text-center py-4">
+//                   {searchKeyword ? 'Không tìm thấy nhà thờ' : 'Đang tải...'}
+//                 </p>
+//               )}
+
+//               {filteredChurches.length > 5 && (
+//                 <p className="text-xs text-muted-foreground text-center pt-2">
+//                   và {filteredChurches.length - 5} nhà thờ khác
+//                 </p>
+//               )}
+//             </div>
+//           </CardContent>
+//         </Card>
+//       </div>
+
+//       {/* Masses List */}
+//       <Card>
+//         <CardHeader>
+//           <CardTitle>
+//             Thánh Lễ ngày {selectedDate.toLocaleDateString('vi-VN', {
+//               weekday: 'long',
+//               day: 'numeric',
+//               month: 'long',
+//               year: 'numeric'
+//             })}
+//           </CardTitle>
+//         </CardHeader>
+//         <CardContent>
+//           {displayMasses.length > 0 ? (
+//             <div className="space-y-4">
+//               {displayMasses.map((mass: Mass) => (
+//                 <div
+//                   key={mass.id}
+//                   className="flex items-start gap-4 p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors"
+//                 >
+//                   <div
+//                     className={cn(
+//                       'w-3 h-full min-h-[80px] rounded-full flex-shrink-0',
+//                       getLiturgicalColorClass(mass.liturgicalColor)
+//                     )}
+//                   />
+//                   <div className="flex-1">
+//                     <div className="flex items-start justify-between gap-4">
+//                       <div>
+//                         <h3 className="font-semibold text-foreground">{mass.title}</h3>
+//                         <p className="text-sm text-muted-foreground mt-1">
+//                           {mass.description}
+//                         </p>
+//                       </div>
+//                       <span className={cn(
+//                         'px-2.5 py-1 rounded-full text-xs font-medium',
+//                         mass.massType === 'sunday' ? 'bg-primary/10 text-primary' :
+//                           mass.massType === 'special' ? 'bg-accent/20 text-accent-foreground' :
+//                             'bg-muted text-muted-foreground'
+//                       )}>
+//                         {mass.massType === 'sunday' ? 'Chúa Nhật' :
+//                           mass.massType === 'special' ? 'Lễ Trọng' : 'Ngày Thường'}
+//                       </span>
+//                     </div>
+//                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3 text-sm text-muted-foreground">
+//                       <span className="flex items-center gap-1.5">
+//                         <ClockIcon className="w-4 h-4" />
+//                         {mass.massTime}
+//                       </span>
+//                       <span className="flex items-center gap-1.5">
+//                         <ChurchIcon className="w-4 h-4" />
+//                         {mass.church?.name}
+//                       </span>
+//                       <span className="flex items-center gap-1.5">
+//                         <MapPinIcon className="w-4 h-4" />
+//                         {mass.church?.address}
+//                       </span>
+//                     </div>
+//                   </div>
+//                 </div>
+//               ))}
+//             </div>
+//           ) : (
+//             <div className="text-center py-12">
+//               <CalendarIcon className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" />
+//               <p className="text-muted-foreground">
+//                 Không có thánh lễ nào trong ngày hôm nay
+//               </p>
+//             </div>
+//           )}
+//         </CardContent>
+//       </Card>
+//     </div>
+//   );
+// }
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -326,6 +655,8 @@ import {
 import { cn } from '@/lib/utils';
 import { mockMasses } from '@/lib/mock-data';
 import type { Mass } from '@/types';
+import { getChurches } from '../service/churchservice';
+import type { Response } from '../nha-tho/page';
 
 const DAYS_OF_WEEK = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
 const MONTHS = [
@@ -341,25 +672,34 @@ function getFirstDayOfMonth(year: number, month: number) {
   return new Date(year, month, 1).getDay();
 }
 
-// Mock churches data
-const mockChurchesData = [
-  { id: 1, name: 'Nhà thờ Chính Tòa Yên Lộ', address: 'Số 1, đường Yên Lộ' },
-  { id: 2, name: 'Nhà thờ Thánh Tâm', address: 'Số 10, đường Hoàng Diệu' },
-  { id: 3, name: 'Nhà thờ Bình An', address: 'Số 5, đường Nguyễn Trãi' },
-  { id: 4, name: 'Nhà thờ Hy Vọng', address: 'Số 8, đường Lê Lợi' },
-  { id: 5, name: 'Nhà thờ Hòa Bình', address: 'Số 3, đường Trần Phú' },
-  { id: 6, name: 'Nhà thờ Ánh Sáng', address: 'Số 12, đường Lý Thường Kiệt' },
-  { id: 7, name: 'Nhà thờ Tình Thương', address: 'Số 7, đường Hai Bà Trưng' },
-];
-
 export default function LichLePage() {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedChurch, setSelectedChurch] = useState<number | null>(null);
+  
+  // State cho API nhà thờ
+  const [churches, setChurches] = useState<Response>({ data: [], message: '' });
+  const [loading, setLoading] = useState(true);
 
-  // Filter churches by keyword
-  const filteredChurches = mockChurchesData.filter((church) =>
+  // Gọi API lấy danh sách nhà thờ
+  useEffect(() => {
+    const fetchChurches = async () => {
+      try {
+        setLoading(true);
+        const response = await getChurches();
+        setChurches(response);
+      } catch (error) {
+        console.error('Error fetching churches:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchChurches();
+  }, []);
+
+  // Filter churches by keyword (dùng API)
+  const filteredChurches = churches.data.filter((church) =>
     church.name.toLowerCase().includes(searchKeyword.toLowerCase())
   );
   const displayChurches = filteredChurches.slice(0, 5);
@@ -506,7 +846,7 @@ export default function LichLePage() {
           </CardContent>
         </Card>
 
-        {/* Filter by Church */}
+        {/* Filter by Church - ĐÃ DÙNG API */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
@@ -535,7 +875,9 @@ export default function LichLePage() {
                 Tất cả nhà thờ
               </Button>
               
-              {displayChurches.length > 0 ? (
+              {loading ? (
+                <p className="text-sm text-muted-foreground text-center py-4">Đang tải...</p>
+              ) : displayChurches.length > 0 ? (
                 displayChurches.map((church) => (
                   <Button
                     key={church.id}
@@ -548,7 +890,7 @@ export default function LichLePage() {
                 ))
               ) : (
                 <p className="text-sm text-muted-foreground text-center py-4">
-                  {searchKeyword ? 'Không tìm thấy nhà thờ' : 'Đang tải...'}
+                  {searchKeyword ? 'Không tìm thấy nhà thờ' : 'Chưa có dữ liệu'}
                 </p>
               )}
 

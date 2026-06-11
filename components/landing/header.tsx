@@ -370,7 +370,7 @@ const mainLinks = [
 const exploreLinks = [
   { href: '/trac-nghiem', label: '📝 Trắc Nghiệm Giáo Lý', needLogin: true },
   { href: '/ai-ho-tro', label: '🤖 AI Trợ Tá Đức Tin', needLogin: false },
-  { href: '/thanh-ca', label: '🎵 Thánh Ca Tuyển Chọn', needLogin: false },
+  { href: '/nhac-mua', label: '🎵 Thánh Ca ', needLogin: false },
   { href: '/thi-co-thuong', label: '🏆 Thi Có Thưởng', needLogin: true, isNew: true },
   { href: '/qua-tang', label: '🎁 Kho Quà Tặng', needLogin: true, isNew: true },
   { href: '/kinh-thanh', label: '📖 Kinh Thánh Song Ngữ', needLogin: false },
