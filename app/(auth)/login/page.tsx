@@ -22,8 +22,9 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: '',
+  
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -40,8 +41,9 @@ const response = await fetch(
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      username: formData.username,
+      email: formData.email,
       password: formData.password,
+  
     }),
   }
 );
@@ -137,13 +139,13 @@ if (response.ok) {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-200 flex items-center gap-2">
                   <Mail className="w-4 h-4 text-amber-400" />
-                  Tên đăng nhập
+                  Email
                 </label>
                 <div className="relative group">
                   <input
-                    type="text"
-                    value={formData.username}
-                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="w-full h-12 px-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 outline-none transition-all duration-300"
                     placeholder="nhap@email.com"
                     required

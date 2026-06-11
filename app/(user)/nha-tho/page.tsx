@@ -1,11 +1,39 @@
 // app/nha-tho/page.tsx
+'use client';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ChurchIcon, MapPinIcon } from '@/components/icons';
 import { mockChurches } from '@/lib/mock-data';
-
+import React,{useState,useEffect} from 'react';
+export interface Response{
+  data: Church[];
+  message: string;
+}
+interface Church {
+  id: number;
+  name: string;
+  address: string;
+}
 export default function NhaThoPage() {
+const [churches, setChurches] = useState<Response>({ data: [], message: '' });
+useEffect(() => {
+  const fetchChurches = async () => {
+    try {
+      const response = await fetch('https://church.codex.pro.vn/Journey_of_faith/Church/search');
+      if (!response.ok) {
+        throw new Error('Failed to fetch churches');
+      }
+      const data = await response.json();
+      setChurches(data);      
+    } catch (error) {
+      console.error('Error fetching churches:', error);
+    }
+  };
+
+  fetchChurches();
+}, []);
+const dataview=churches.data ?? []
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white dark:from-stone-900 dark:to-stone-950">
       <div className="space-y-6 p-4 md:p-6 max-w-6xl mx-auto">
@@ -21,7 +49,7 @@ export default function NhaThoPage() {
         </div>
 
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {mockChurches.map((church) => (
+          {dataview.map((church: Church) => (
             <Card
               key={church.id}
               className="group border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-white/80 dark:bg-stone-900/80 backdrop-blur-sm hover:bg-white dark:hover:bg-stone-900 rounded-2xl overflow-hidden"
@@ -44,6 +72,7 @@ export default function NhaThoPage() {
                     </div>
                   </div>
                 </div>
+
                 <Button
                   variant="outline"
                   className="w-full mt-3 border-amber-200 dark:border-stone-700 text-red-800 dark:text-amber-400 hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-900 dark:hover:text-amber-300 hover:border-red-300 dark:hover:border-amber-700 rounded-full font-medium transition-all duration-200 group/btn"
